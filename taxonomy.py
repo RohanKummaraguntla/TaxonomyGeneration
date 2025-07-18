@@ -12,13 +12,14 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
-
-# Load Hugging Face model
+# HuggingFace (open source) set up
 MODEL_NAME = "HuggingFaceH4/zephyr-7b-beta"
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+# Model to use
 model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, device_map="auto", torch_dtype="auto")
 text_generator = pipeline("text-generation", model=model, tokenizer=tokenizer, max_new_tokens=2048)
 
+# Extract information from the PDF that the user inputs
 def extract_text_from_pdf(file):
     doc = fitz.open(stream=file.read(), filetype="pdf")
     text = []
@@ -26,7 +27,7 @@ def extract_text_from_pdf(file):
     for page in doc:
         width = page.rect.width
         height = page.rect.height
-
+        # Read it in left column and then right column because patents have 2 columns
         left_col = fitz.Rect(0, 0, width / 2, height)
         right_col = fitz.Rect(width / 2, 0, width, height)
 
@@ -35,9 +36,10 @@ def extract_text_from_pdf(file):
 
         combined = left_text.strip() + "\n" + right_text.strip()
         text.append(combined)
-
+    # Return the whole text
     return "\n\n".join(text)
 
+# Read it in chunks so it doesn't eat up all of the tokens
 def chunk_text(text, max_tokens=2000):
     tokens = tokenizer.encode(text)
     chunks = []
@@ -49,12 +51,13 @@ def chunk_text(text, max_tokens=2000):
         start = end
     return chunks
 
+# Created a nested output so the taxonomy looks better
 def nest_taxonomy(flat_list):
     def recursive_dict():
         return defaultdict(recursive_dict)
 
     hierarchy = recursive_dict()
-
+    # Organize in levels
     for item in flat_list:
         l1 = item["Level 1"] or "null"
         l2 = item["Level 2"] or "null"
@@ -73,6 +76,7 @@ def nest_taxonomy(flat_list):
 
     return to_dict(hierarchy)
 
+# Query to ask hugging face what it should do
 def query_huggingface(prompt_chunk):
     system_message = """
 You are a patent analysis assistant. Your task is to extract a structured taxonomy from patent text and return it in valid JSON format. There should be approximately 100 steps in the taxonomy.
@@ -118,13 +122,14 @@ Format the comment like this:
 
     full_prompt = f"{system_message}\n\nAnalyze this patent text chunk and extract structured taxonomy in JSON:\n{prompt_chunk}"
     result = text_generator(full_prompt, do_sample=False)[0]["generated_text"]
+    # Return in JSON
     return result
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
     if 'file' not in request.files:
         return jsonify({"error": "No file uploaded"}), 400
-
+    # Make sure it is a PDF
     file = request.files['file']
     if not file.filename.lower().endswith('.pdf'):
         return jsonify({"error": "Only PDF files are supported"}), 400
@@ -136,7 +141,7 @@ def analyze():
         combined_results = []
         for chunk in chunks:
             reply = query_huggingface(chunk)
-
+            # Chunk response for tests
             print("\n--- Chunk Response ---\n")
             print(reply)
             print("\n----------------------\n")
@@ -154,15 +159,15 @@ def analyze():
                     "raw_response": reply
                 }), 500
         nested = nest_taxonomy(combined_results)
-
+        # Final response for data
         print("\n--- Final Response ---\n")
         print(nested)
         print("\n----------------------\n")
-
+        # return in JSON
         return jsonify(nested)
 
     except Exception as e:
         return jsonify({"error": f"Processing error: {str(e)}"}), 500
-
+# Main
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
