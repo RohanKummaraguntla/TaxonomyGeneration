@@ -1,4 +1,4 @@
-#Patent Taxonomy Generation (taxonomy.py)
+# Patent Taxonomy Generation (taxonomy.py)
 
 A Flask-based API that uses Hugging Face language models to extract structured taxonomies from patent PDF files. 
 
