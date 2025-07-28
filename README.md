@@ -12,7 +12,7 @@ A Flask-based API that uses Hugging Face language models to extract structured t
 
 ---
 
-## Setup Instructions
+## Setup instructions
 
 ### 1. Clone the repository and navigate into it
 
@@ -23,3 +23,16 @@ cd your-repo
 ### 2. Install requirements
 
 pip install flask flask-cors transformers torch python-dotenv PyMuPDF
+
+### 3. Running the program
+
+Requires Python 3.9+
+
+PyPDF2, pandas, tqdm (install via pip) Run: pip install openai PyPDF2 pandas tqdm
+Running the Program
+
+Setup:
+1. Activate a virtual environment to run the python program
+2. Input a Patent PDF into the same folder
+3. Run the program and the output will be printed and sent to an external file
+4. Save the external file to read the outputed taxonomy
