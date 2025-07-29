@@ -1,6 +1,12 @@
 # Patent Taxonomy Generation (taxonomy.py)
 
-A Flask-based API that uses Hugging Face language models to extract structured taxonomies from patent PDF files. 
+## What is this?
+
+This repository contains the code, data processing pipeline, and LaTeX manuscript for a paper titled:
+
+**“Enhancing Patent Readability: Leveraging Large Language Model-Generated Taxonomies for Structured Outputs”**
+
+A Flask-based API that uses large language models to extract structured taxonomies from patent PDF files. 
 
 ---
 
@@ -20,7 +26,7 @@ bash
 git clone https://github.com/your-username/your-repo.git
 cd your-repo
 
-### 2. Install requirements
+### 2. Prerequisites
 
 pip install flask flask-cors transformers torch python-dotenv PyMuPDF
 
@@ -36,3 +42,8 @@ Setup:
 2. Input a Patent PDF into the same folder
 3. Run the program and the output will be printed and sent to an external file
 4. Save the external file to read the outputed taxonomy
+
+
+## Paper
+
+Compile the paper and run it
