@@ -1,0 +1,193 @@
+\documentclass{ifacconf}
+
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Enhancing Patent Readability: Leveraging Large Language Model-Generated Taxonomies for Structured Outputs}
+
+\author{Rohan Kummaraguntla}
+
+\address{Institute for Computing in Research}
+
+\begin{abstract}
+Patent documents are notoriously difficult to read because of their technical jargon, strict formatting, and absence of semantic structure. This paper explores the application of large language models (LLMs) to produce multi-level hierarchical taxonomies as a strategy to make patents more readable and applicable. By converting unstructured language into structured hierarchies, automated taxonomies offer an intuitive and scalable solution to navigating dense legal text for innovators, researchers, and intellectual property professionals alike. A diverse set of patents from various fields including software, medical devices, and materials science are analyzed to evaluate the consistency, depth, and readability of the generated taxonomies. The results indicate that LLMs can effectively restructure complicated legal documents into understandable, layered forms quickly—providing a consistent and generalizable tool for enhancing information retrieval, prior-art analysis, and more extensive human-AI collaboration in intellectual property applications.
+\end{abstract}
+
+\begin{keyword}
+Patent Taxonomies \sep Large Language Models \sep Intellectual Property \sep Prior Art \sep Information Retrieval \sep JavaScript Object Notation (JSON)
+\end{keyword}
+
+\end{frontmatter}
+
+\section{Introduction}
+
+
+The patent system is subject to the tension between technical disclosure and accessibility. Patents are commonly used to store technical knowledge, but their complex structure and pedantic language tend to prevent the knowledge transfer that they are intended to facilitate \citep{yao2024reasoning, chen2024llms}. The challenge of maintaining readability while preserving specifications impacts a broad range of stakeholders across the innovation ecosystem, from patent examiners conducting prior-art searches to researchers seeking to build upon existing developments to innovators surveying patents in varying fields. 
+
+\subsection{Problem Statement}
+
+Contemporary patents reflect a number of characteristics that limit their function as tools of knowledge dissemination. The organizational structure of patents, while legally standardized, does not necessarily match how technical professionals conceptualize and comprehend the information within \cite{cui2024nlp}. Patents also tend to use highly formalized language that obscures their meaning and application. 
+
+These structural limitations to current patent documentation are barriers to modern-day innovators, researchers, and patent examiners alike. Examiners are faced with strict deadlines that limit their ability to adequately perform comprehensive prior-art searches. Similarly, legal practitioners must invest significant time and effort to understand the dense base documents, which is a necessary commitment in conducting high-level analysis. Issues of time and effort are disproportionately large for for small companies or individual inventors who generally lack the necessary resources to support patent analysis \cite{li2024long}.
+
+The scope of this problem has only expanded as technological complexity has increased. Specifically, cross-disciplinary innovations increasingly challenge traditional patent classification schemes, since they make it difficult for both the inventor and patent examiner to comprehend all of the details. These trends suggest that existing approaches to patent readability are underdeveloped.
+
+\subsection{Motivation}
+
+
+
+
+
+
+Taxonomic organization is a promising approach to improving patent readability and accessibility. Taxonomies offer hierarchical structures that outline relationships between concepts at varying levels of abstraction, thereby allowing for an easy searching mechanism \cite{radev2019scaling}. Specifically, effective patent taxonomies could serve multiple functions: rapid identification of relevant technical domains, systematically comparing similar inventions, and offering conceptual frameworks for understanding applications.
+
+Existing patent classification schemes have been fairly limited and are more valuable in terms of standardization. The Cooperative Patent Classification and International Patent Classification systems rely on predefined categories that do not take in accessibility or readability \cite{chalkidis2020legal}. These systems are maintained manually and are static in many ways \cite{yang2024eval}.
+
+Recent developments in natural language processing offer new opportunities in automating taxonomic generation. Large language models (LLMs) are capable of strong contextualization of the semantic relationship between a document and its usage \cite{bornmann2024citation}. Unlike rule-based approaches, these models can process unstructured text and produce a tailored organizational approach. This suggests that LLM-generated taxonomies could provide a more nuanced approach to organization than traditional patent classification \cite{kopp2024llmreadability}.
+
+\subsection{Significance of This Research}
+
+This research addresses several important needs in the intellectual property domain. From a practical perspective, enhanced patent access could lessen barriers to innovation via a more efficient process for prior-art analysis. Small organizations and individual inventors could significantly benefit from a taxonomic approach to patents, especially if the process is automated \cite{xlscout2024llms}.
+
+This research can also benefit patent examiners who might utilize taxonomies to improve the efficiency of their patent examination process. Patent examiners could perform more, equally thorough prior art searches within the same time-frame of the traditional patent examination process. Corporate researchers could identify relevant technologies and potential collaboration opportunities more effectively. Legal professionals could allocate more time to strategic analysis rather than basic document comprehension \citep{arts2021artificial}.
+
+This research extends beyond immediate practical considerations by expanding on the use of LLMs for automating organizational structures to improve document readability. The methods used in this research for generating patent taxonomies could possibly be leveraged in other fields that also have highly technical documents including scientific literature, regulatory documents, and technical standards. 
+
+The broader implications of this research might strengthen the relationship between machine learning and human comprehension of complex information. As technical knowledge continues to grow, tools that can improve cognitive capabilities will become increasingly important.
+
+\section{Background and Related Work}
+
+Patents pose a challenge to traditional forms of natural language processing due to their highly-technical prose and detailed text. Even as advancements in LLMs have improved natural language processing, their application to patent-text remains under-explored.
+
+\subsection{Patent Taxonomies and Classification}
+Standard systems for patent classification (i.e. Cooperative Patent Classification and International Patent Classification) use manual or rule-based taxonomies which are outdated and unusable at scale especially when dealing with interdisciplinary innovation.
+
+Traditional machine-learning based algorithms to patent classification like PatentBERT (fine-tuned BERT) and PatentTransformer-2 (metadata controller) offer a step toward automation but do not attempt to address readability. 
+
+\subsection{Patents Readability}
+Prior research regarding patent readability using Flesch-Kinkcaid models and SMOG scores have revealed the usefulness of taxonomic organization. These models, while useful, fail to generate a taxonomy. This research intends to use these equations to ensure the taxonomies are statistically valuable.
+
+\subsection{Gap Identified}
+There has been prior research utilizing LLMs for patent text generation, claim evaluation, and classification. However, there has a been a lack of research evaluating LLM-generated hierarchical taxonomies against readability metrics and efficiency. This paper attempts to addresses this gap by:
+
+\begin{itemize}
+  \item Generating multi-level taxonomies from patent texts using prompt-engineered LLMs.
+  \item Conducting readability assessments to evaluate prose literacy, document literacy, and quantitative literacy.
+  \item Automating taxonomic generation for future patent classification and prior-art analysis.
+\end{itemize}
+
+\subsection{Related Tools and Models}
+Recent developments like PatentLMM, an LLM used to generate patent figures, have shown the viability of using LLMs for automation. Other works, like large-scale literature reviews of LLMs indicate that how they can complement stakeholder‑centric evaluation.
+
+By building upon these efforts, this research applies LLMs to hierarchical patent taxonomy generation and evaluating them using human‑centered usability.
+
+\section{Methodology}
+
+\subsection{Patent Selection}
+To ensure generating taxonomies was viable for various industries and patent types, we assembled a heterogeneous sample of patents from numerous fields, such as medical devices, semiconductor manufacturing, polymer chemistry, and software systems. Patents were retrieved from the United States Patent and Trademark Office (USPTO) database with an emphasis on granted utility patents having lengthy and detailed specifications. Every chosen patent was downloaded in PDF and XML format to facilitate precise text extraction and structural parsing.
+
+\subsection{LLM Prompt Engineering}
+Prompt engineering is a crucial aspect of this research. Generating a taxonomy requires explicit instructions to existing LLMs. The prompts were used requested hierarchal taxonomies, specifically 5- and 7-level classification levels, in order to maintain as much technical information but display it in a readable manner. The prompt resulted in an output of strict JSON structure and the following schema:
+
+\begin{itemize}
+    \item Hierarchy fields from Level 1 through Level 7
+    \item An accompanying ``Technical Summary'' field for each final node (leaf)
+\end{itemize}
+
+We tested both structured prompts with sample taxonomies and rigid formatting guidelines and unstructured prompts with open-ended natural-language requests to deduce which one would give us a more consistent output. This enabled us to measure how prompt formality impacted generation consistency and token length. Structured prompts tended to produce more consistent and highly nested responses, whereas unstructured prompts differed more in depth and category structure. However, we found that examples tended to force the LLM to reproduce those exact lines even for a different patent.
+
+\subsection{Models Used}
+We set up the API requests with temperature at 0.2 (to minimize randomness) and max tokens to 4,096 - 8,192 based on input chunk size. Rate limits and latency were also monitored as a secondary measure of model usability in practical applications.
+
+\subsection{Taxonomy Generation Pipeline}
+Patents were accessed from Google Patents, and their exact PDFs were inserted into the LLM. Each chunk (section of the patent that is not boilerplate or a legal license) was then passed into the LLM via the prompt template, and output segments were concatenated and recursively merged to form a unified taxonomy. Post-processing included:
+\begin{itemize}
+    \item Validation of JSON structure through automated scripts.
+    \item Normalization of terminology (e.g., converting “CVD” to “Chemical Vapor Deposition”).
+    \item Hierarchal organization where one element is related to the next
+\end{itemize}
+
+Overall, the process produced 7-level taxonomies per patent, annotated with remarks describing the function or applicability of the lowest-level nodes. The taxonomies were exported in spreadsheet and graph formats for assessment in later phases.
+
+\section{Results}
+
+\subsection{Quantitative Analysis}
+
+The performance of LLM-generated taxonomies was assessed using multiple quantitative measures, with comparisons drawn against the Cooperative Patent Classification (CPC) system. Across a representative set of patents, the number of unique nodes generated by the LLMs was substantially higher, especially in the 5- and 7-level configurations. These results suggest a more granular understanding of the patent content. Average depth and breadth metrics indicated that 7-level taxonomies captured significantly more hierarchical structure, offering greater thematic resolution, while 5-level versions balanced detail with interpretability.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{percent.pdf}
+    \caption{Taxonomy vs Patent: Percent Accuracy by Category}
+\end{figure}
+
+The taxonomy outperformed the original patent in document, prose, and quantitative literacy tasks. Users scored higher across all categories when using the LLM-generated taxonomy. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Document histo.pdf}
+    \caption{Document Density Plot: Taxonomy vs Patent}
+\end{figure}
+
+The biggest difference is with document literacy which is being able to pinpoint information in the patent document. As you try and get more questions correct, teh taxonomy is more useful as shown in the histogram.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Prose histo.pdf}
+    \caption{Prose Density Plot: Taxonomy vs Patent}
+\end{figure}
+
+The patent is also helpful in analyzing the prose questions. Users were able to answer more prose literacy questions correct using the taxonomy than the patent.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Quant histo.pdf}
+    \caption{Quantitative Density Plot: Taxonomy vs Patent}
+\end{figure}
+
+The closest the taxonomy got to being worse than the patent was for quantitative literacy. However, it is still performing better, but it is very close. This is because the taxonomy sometimes excluded important data points and figures.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{time plot.pdf}
+    \caption{Scatter Plot with High-Performer Density Markers}
+\end{figure}
+
+The scatter plot shows that the average time it took for someone to complete the taxonomy survey was a lot shorter than the average time for someone to complete the patent survey. Even the highest scorers used the taxonomy more efficiently than the patent.
+
+\section{Discussion}
+
+The results suggest that large language models are capable of generating structured, domain-aware taxonomies from patent text with a level of interpretability that surpasses traditional classification systems. The taxonomies allow more efficient browsing of complex technical disclosures and improve semantic segmentation. Notably, the gains in category granularity and entropy signal that LLMs can reduce topical redundancy and encourage semantic differentiation. However, the tendency of some outputs to simplify or generalize highly technical language raises concerns about information loss in edge cases where precision is essential.
+
+The ability to generate deep, interpretable taxonomies automatically from unstructured patent text has broad implications. Patent examiners may benefit from improved document triage. Technical scouts could navigate emerging technology landscapes more effectively. Moreover, developers of semantic IP search engines may leverage LLM taxonomies as foundational metadata to drive machine-guided retrieval, clustering, and visualization.
+
+\section{Conclusion}
+
+This study demonstrates that large language models can produce consistent, high-resolution taxonomies that enhance the interpretability of complex patent documents. Across diverse technical domains, the generated structures outperform traditional systems like CPC in both readability and user satisfaction. While challenges remain—particularly around standardization and hallucination—these methods offer a scalable, domain-agnostic pathway to more intuitive intellectual property systems.
+
+\section{Future Work}
+
+Several avenues remain for expanding this work. A priority is to scale the approach to a larger and more diverse patent corpus, allowing for broader statistical generalization. In parallel, integration of the generated taxonomies into interactive interfaces, such as semantic search engines or patent visualization dashboards, would enable direct user testing in applied settings. Another important direction is model fine-tuning on patent-specific corpora to improve technical vocabulary retention and mitigate hallucination. Finally, alignment with existing  classification systems could bridge the gap between emergent AI methods and traditional regulatory workflows.
+
+\section{Acknowledgments}
+I would like to thank my mentors Taylor Blair and Andrew J. Ouderkirk for their time and guidance throughout the research process. I would also like to thank Mark Galassi and the Institute
+for Computing in Research for providing me the opportunity to do this research.
+
+\nocite{*}
+
+\bibliographystyle{ifacconf}
+\bibliography{llm_patent_taxonomy} % Make sure llm_patent_taxonomy.bib is in the same directory
+
+\end{document}
